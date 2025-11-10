@@ -1,0 +1,44 @@
+// Указываем используемую protobuf версию
+syntax = "proto3";
+
+package auth; //Namespace
+
+/*** Параметр используется при генерации кода на Go
+это описание пути для импорта получаемого пакета в Go и имени пакета **/
+option go_package = "jorge.sso.v1;ssov1";
+
+// Описываем конкретный сервис в рамках нашего проекта - разбиваем проект на более мелкие модули
+service Auth{
+    //Объявляем методы сервиса
+    rpc Register (RegisterRequest) returns (RegisterResponse);
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc IsAdmin(IsAdminRequest) returns (IsAdminResponse);
+}
+
+// эти объекты - перечни передаваемых данных
+message RegisterRequest{
+    string email = 1; // почта регистрируемого пользователя
+    string password = 2; // пароль регистрируемого пользователя
+}
+
+message RegisterResponse{
+    int64 user_id = 1; // id зарегистрированного пользователя
+}
+
+message LoginRequest{
+    string email = 1;
+    string password = 2;
+    int32 app_id = 3; // id сервиса, в который логинится пользователь
+}
+
+message LoginResponse{
+    string token = 1; // токен аутентификации залогиненного пользователя
+}
+
+message IsAdminRequest{
+    int64 user_id = 1;
+}
+
+message IsAdminResponse{
+    bool is_admin = 1;
+}
